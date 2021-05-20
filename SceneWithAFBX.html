@@ -16,20 +16,34 @@
       //////////// CREATING THE CAMERA ////////////
       // More info about the camera here: https://threejsfundamentals.org/threejs/lessons/threejs-cameras.html //
       const camera = new THREE.PerspectiveCamera(
-        75,
+        45,
         window.innerWidth / window.innerHeight,
-        0.1,
-        1000
+        1,
+        8000
       );
+      // We move the camera to see well the object
+      camera.position.z = 2000;
+      camera.position.y = 1000;
+      camera.position.x = 1500;
+
+      // We say to the camera to look at a point in the scene.
+      //To know more about Vector3: https://threejs.org/docs/#api/en/math/Vector3
+      camera.lookAt(new THREE.Vector3(1500, 0, 0));
+
       //////////// CREATING THE RENDERER ////////////
       // More info about the renderer here: https://threejs.org/docs/#api/en/renderers/WebGLRenderer //
       const renderer = new THREE.WebGLRenderer();
       renderer.setSize(window.innerWidth, window.innerHeight);
       document.body.appendChild(renderer.domElement);
 
+      // Adding light to see the model in the scene
+      scene.add(new THREE.AmbientLight(0xffffff, 1));
+
       //////////// ADDING THE MODEL ////////////
       var manager = new THREE.LoadingManager();
-
+      manager.onProgress = function (item, loaded, total) {
+        console.log(item, loaded, total);
+      };
       // On Progress, to load the model, we will show inside the console the progression.
       var onProgress = function (xhr) {
         if (xhr.lengthComputable) {
@@ -43,7 +57,7 @@
       var loader = new FBXLoader(manager);
       // We are loading a model by giving the URL of this one
       loader.load(
-        "http://127.0.0.1/hitwwebsite/assets/models/micv6.fbx",
+        "http://127.0.0.1:8080/models/mic/micv6.fbx",
         function (object) {
           scene.add(object);
         },
@@ -55,10 +69,6 @@
       // To see something, we will need to render it.
       // So we are creating a function that will be launch the rendering and recall the function directly.
       function animate() {
-        // Every time the function animate is called, we will move a little bit the cube to create the rotation of it.
-        cube.rotation.x += 0.01;
-        cube.rotation.y += 0.01;
-
         // We are asking the renderer to render the scene and the camera.
         renderer.render(scene, camera);
       }
