@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Create your first Scene with a Cube Moving inside with VR</title>
+    <meta charset="utf-8" />
+    <script type="module">
+      // Find the latest version by visiting https://cdn.skypack.dev/three.
+
+      import * as THREE from "https://cdn.skypack.dev/three";
+      // Adding an import to FBXLoader to load the model inside the scene.
+      import { FBXLoader } from "https://cdn.skypack.dev/three/examples/jsm/loaders/FBXLoader.js";
+
+      //////////// CREATING THE SCENE ////////////
+      const scene = new THREE.Scene();
+
+      //////////// CREATING THE CAMERA ////////////
+      // More info about the camera here: https://threejsfundamentals.org/threejs/lessons/threejs-cameras.html //
+      const camera = new THREE.PerspectiveCamera(
+        75,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        1000
+      );
+      //////////// CREATING THE RENDERER ////////////
+      // More info about the renderer here: https://threejs.org/docs/#api/en/renderers/WebGLRenderer //
+      const renderer = new THREE.WebGLRenderer();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      document.body.appendChild(renderer.domElement);
+
+      //////////// ADDING THE MODEL ////////////
+      var manager = new THREE.LoadingManager();
+
+      // On Progress, to load the model, we will show inside the console the progression.
+      var onProgress = function (xhr) {
+        if (xhr.lengthComputable) {
+          var percentComplete = (xhr.loaded / xhr.total) * 100;
+          console.log(Math.round(percentComplete, 2) + "% downloaded");
+        }
+      };
+      // We can handle error here
+      var onError = function (xhr) {};
+      // We are creating an instance of FBXLoader.
+      var loader = new FBXLoader(manager);
+      // We are loading a model by giving the URL of this one
+      loader.load(
+        "http://127.0.0.1/hitwwebsite/assets/models/micv6.fbx",
+        function (object) {
+          scene.add(object);
+        },
+        onProgress,
+        onError
+      );
+
+      //////////// CREATING ANIMATE FUNCTION ////////////
+      // To see something, we will need to render it.
+      // So we are creating a function that will be launch the rendering and recall the function directly.
+      function animate() {
+        // Every time the function animate is called, we will move a little bit the cube to create the rotation of it.
+        cube.rotation.x += 0.01;
+        cube.rotation.y += 0.01;
+
+        // We are asking the renderer to render the scene and the camera.
+        renderer.render(scene, camera);
+      }
+
+      // Here, we will use this function to control the animation to make it more efficient for VR.
+      renderer.setAnimationLoop(animate);
+    </script>
+  </head>
+  <body></body>
+</html>
