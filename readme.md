@@ -1,6 +1,6 @@
-# Three JS veille
+# Three JS
 
-## What you will need
+## To help you to work with WEBXR
 
 - Install NPM package [Http-Server](https://www.npmjs.com/package/http-server). To be able to launch the page in your browser.
 
