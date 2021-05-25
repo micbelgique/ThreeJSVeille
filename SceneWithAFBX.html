@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Create your first Scene with a Cube Moving inside with VR</title>
+    <title>Create your first Scene with a FBX Model</title>
     <meta charset="utf-8" />
     <script type="module">
       // Find the latest version by visiting https://cdn.skypack.dev/three.
@@ -41,6 +41,7 @@
 
       //////////// ADDING THE MODEL ////////////
       var manager = new THREE.LoadingManager();
+
       manager.onProgress = function (item, loaded, total) {
         console.log(item, loaded, total);
       };

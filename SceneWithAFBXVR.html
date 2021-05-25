@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Create your first Scene with a FBX Model inside with VR</title>
+    <meta charset="utf-8" />
+    <script type="module">
+      // Find the latest version by visiting https://cdn.skypack.dev/three.
+
+      import * as THREE from "https://cdn.skypack.dev/three";
+      // Adding an import to FBXLoader to load the model inside the scene.
+      import { FBXLoader } from "https://cdn.skypack.dev/three/examples/jsm/loaders/FBXLoader.js";
+      // We are adding the import of VRButton here. For more information: https://threejs.org/docs/#manual/en/introduction/How-to-create-VR-content
+      import { VRButton } from "https://cdn.skypack.dev/three/examples/jsm/webxr/VRButton.js";
+
+      //////////// CREATING THE SCENE ////////////
+      const scene = new THREE.Scene();
+
+      //////////// CREATING THE CAMERA ////////////
+      // More info about the camera here: https://threejsfundamentals.org/threejs/lessons/threejs-cameras.html //
+      const camera = new THREE.PerspectiveCamera(
+        45,
+        window.innerWidth / window.innerHeight,
+        1,
+        8000
+      );
+      // We move the camera to see well the object
+      camera.position.z = 2000;
+      camera.position.y = 1000;
+      camera.position.x = 1500;
+
+      //////////// CREATING THE RENDERER ////////////
+      // More info about the renderer here: https://threejs.org/docs/#api/en/renderers/WebGLRenderer //
+      const renderer = new THREE.WebGLRenderer();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+
+      // We tell to WebGLRenderer to enable XR rendering. To know more about WebXR here: https://github.com/immersive-web/webxr/blob/master/explainer.md
+      renderer.xr.enabled = true;
+      document.body.appendChild(renderer.domElement);
+
+      // We are adding in the body the VR button.
+      document.body.appendChild(VRButton.createButton(renderer));
+
+      // Adding light to see the model in the scene
+      scene.add(new THREE.AmbientLight(0xffffff, 1));
+
+      //////////// ADDING THE MODEL ////////////
+      var manager = new THREE.LoadingManager();
+
+      manager.onProgress = function (item, loaded, total) {
+        console.log(item, loaded, total);
+      };
+      // On Progress, to load the model, we will show inside the console the progression.
+      var onProgress = function (xhr) {
+        if (xhr.lengthComputable) {
+          var percentComplete = (xhr.loaded / xhr.total) * 100;
+          console.log(Math.round(percentComplete, 2) + "% downloaded");
+        }
+      };
+      // We can handle error here
+      var onError = function (xhr) {};
+      // We are creating an instance of FBXLoader.
+      var loader = new FBXLoader(manager);
+      // We are loading a model by giving the URL of this one
+      loader.load(
+        "http://127.0.0.1:8080/models/hololens/Gafas.fbx",
+        function (object) {
+          scene.add(object);
+        },
+        onProgress,
+        onError
+      );
+
+      //////////// CREATING ANIMATE FUNCTION ////////////
+      // To see something, we will need to render it.
+      // So we are creating a function that will be launch the rendering and recall the function directly.
+      function animate() {
+        // We are asking the renderer to render the scene and the camera.
+        renderer.render(scene, camera);
+      }
+
+      // Here, we will use this function to control the animation to make it more efficient for VR.
+      renderer.setAnimationLoop(animate);
+    </script>
+  </head>
+  <body></body>
+</html>

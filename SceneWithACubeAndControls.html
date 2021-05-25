@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Create your first Scene with a Cube and Controls</title>
+    <meta charset="utf-8" />
+    <script type="module">
+      // Find the latest version by visiting https://cdn.skypack.dev/three.
+
+      import * as THREE from "https://cdn.skypack.dev/three";
+
+      // Adding the import for OrbitControls to use it lower on the code.
+      import { OrbitControls } from "https://cdn.skypack.dev/three/examples/jsm/controls/OrbitControls.js";
+
+      //////////// CREATING THE SCENE ////////////
+      const scene = new THREE.Scene();
+
+      //////////// CREATING THE CAMERA ////////////
+      // More info about the camera here: https://threejsfundamentals.org/threejs/lessons/threejs-cameras.html //
+      const camera = new THREE.PerspectiveCamera(
+        75,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        1000
+      );
+      //////////// CREATING THE RENDERER ////////////
+      // More info about the renderer here: https://threejs.org/docs/#api/en/renderers/WebGLRenderer //
+      const renderer = new THREE.WebGLRenderer();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      document.body.appendChild(renderer.domElement);
+
+      //////////// CREATING THE CUBE ////////////
+      // A BoxGeometry is the container for all the points(vertices) and fill(faces) of the cube.
+      const geometry = new THREE.BoxGeometry();
+      // To color the cube, we will need a material. Here, we are in a MeshBasicMaterial and we specify the color of the cube.
+      const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+      // Mesh is an object who take the geometry and applies to the geometry the material on it.
+      const cube = new THREE.Mesh(geometry, material);
+      // After that, we add the cube inside our scene.
+      scene.add(cube);
+      // By default, when we call scene.add(), the thing we add will be added to the coordinates (0,0,0).
+      //This would cause both the camera and the cube to be inside each other. To avoid this, we simply move the camera out a bit.
+      camera.position.z = 5;
+
+      //////////// ADDING CONTROLS ////////////
+      // More info about controls here: https://threejs.org/docs/#examples/en/controls/OrbitControls
+      let controls = new OrbitControls(camera, renderer.domElement);
+      controls.target.set(0, 0, 0);
+
+      //////////// CREATING ANIMATE FUNCTION ////////////
+      // To see something, we will need to render it.
+      // So we are creating a function that will be launch the rendering and recall the function directly.
+      function animate() {
+        // More info about requestAnimationFrame here: https://developer.mozilla.org/fr/docs/Web/API/Window/requestAnimationFrame
+        requestAnimationFrame(animate);
+
+        // We are asking the renderer to render the scene and the camera.
+        renderer.render(scene, camera);
+      }
+      animate();
+    </script>
+  </head>
+  <body></body>
+</html>
