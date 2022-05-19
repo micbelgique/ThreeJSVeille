@@ -9,7 +9,7 @@
 
       import * as THREE from "https://cdn.skypack.dev/three";
       // We are adding the import of VRButton here. For more information: https://threejs.org/docs/#manual/en/introduction/How-to-create-VR-content
-      import { ARButton } from "https://cdn.skypack.dev/three/examples/jsm/webxr/ARButton.js";
+      import { ARButton } from "https://cdn.rawgit.com/mrdoob/three.js/r117/examples/jsm/webxr/ARButton.js";
 
       //////////// CREATING THE SCENE ////////////
       const scene = new THREE.Scene();
@@ -43,6 +43,7 @@
       const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
 
       // Adding a controller when it's in AR, to put the cube when we clic on the screen.
+      //phone
       var controller = renderer.xr.getController(0);
       controller.addEventListener("select", onSelect);
       scene.add(controller);
